@@ -64,3 +64,30 @@ where
 
     guard.insert(k.to_owned(), value.to_owned());
 }
+pub fn add_value<T>(arc: &Arc<Mutex<T>>, value: T)
+where
+    T: Clone + std::ops::AddAssign,
+{
+    let mut guard = match arc.lock() {
+        Ok(guard) => guard,
+        Err(_) => {
+            eprintln!("Failed to acquire lock on T");
+            return;
+        }
+    };
+    *guard += value;
+}
+
+pub fn sub_value<T>(arc: &Arc<Mutex<T>>, value: T)
+where
+    T: Clone + std::ops::SubAssign,
+{
+    let mut guard = match arc.lock() {
+        Ok(guard) => guard,
+        Err(_) => {
+            eprintln!("Failed to acquire lock on T");
+            return;
+        }
+    };
+    *guard -= value;
+}
