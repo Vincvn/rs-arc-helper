@@ -1,4 +1,4 @@
-use std::{collections::HashMap, hash::Hash, sync::{Arc, Mutex}};
+use std::{collections::{HashMap, HashSet}, hash::Hash, sync::{Arc, Mutex}};
 pub fn get_arc<T>(data: T) -> Arc<Mutex<T>> {
     Arc::new(Mutex::new(data))
 }
@@ -32,6 +32,21 @@ where
     };
 
     guard.push(value.to_owned());
+}
+
+pub fn put_value<T>(arc: &Arc<Mutex<HashSet<T>>>, value: T)
+where
+    T: Eq + Hash,
+{
+    let mut guard = match arc.lock() {
+        Ok(guard) => guard,
+        Err(_) => {
+            eprintln!("Failed to acquire lock on Arc<Mutex<Vec<T>>>");
+            return;
+        }
+    };
+
+    guard.insert(value);
 }
 
 pub fn concat_value<T>(arc: &Arc<Mutex<Vec<T>>>, value: &[T])
