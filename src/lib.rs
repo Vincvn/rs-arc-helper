@@ -106,3 +106,19 @@ where
     };
     *guard -= value;
 }
+
+pub fn remove_value<T>(arc: &Arc<Mutex<Vec<T>>>, value: &T)
+where
+    T: Eq + PartialEq
+{
+    let mut guard = match arc.lock() {
+        Ok(guard) => guard,
+        Err(_) => {
+            eprintln!("Failed to acquire lock on T");
+            return;
+        }
+    };
+    if let Some(index ) = guard.iter().position(|s| s == value) {
+        guard.remove(index);
+    }
+}
