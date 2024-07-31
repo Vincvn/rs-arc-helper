@@ -1,4 +1,7 @@
 use std::{collections::{HashMap, HashSet}, hash::Hash, sync::{Arc, Mutex}};
+pub mod vec;
+pub mod hashset;
+pub mod int;
 pub fn get_arc<T>(data: T) -> Arc<Mutex<T>> {
     Arc::new(Mutex::new(data))
 }
@@ -23,45 +26,21 @@ pub fn push_value<T>(arc: &Arc<Mutex<Vec<T>>>, value: &T)
 where
     T: Clone,
 {
-    let mut guard = match arc.lock() {
-        Ok(guard) => guard,
-        Err(_) => {
-            eprintln!("Failed to acquire lock on Arc<Mutex<Vec<T>>>");
-            return;
-        }
-    };
-
-    guard.push(value.to_owned());
+    vec::push(arc, value)
 }
 
 pub fn put_value<T>(arc: &Arc<Mutex<HashSet<T>>>, value: T)
 where
     T: Eq + Hash,
 {
-    let mut guard = match arc.lock() {
-        Ok(guard) => guard,
-        Err(_) => {
-            eprintln!("Failed to acquire lock on Arc<Mutex<Vec<T>>>");
-            return;
-        }
-    };
-
-    guard.insert(value);
+    hashset::put(arc, value)
 }
 
 pub fn concat_value<T>(arc: &Arc<Mutex<Vec<T>>>, value: &[T])
 where
     T: Clone,
 {
-    let mut guard = match arc.lock() {
-        Ok(guard) => guard,
-        Err(_) => {
-            eprintln!("Failed to acquire lock on Arc<Mutex<Vec<T>>>");
-            return;
-        }
-    };
-
-    guard.extend_from_slice(value);
+    vec::concat(arc, value)
 }
 
 pub fn insert_value<T1, T2>(arc: &Arc<Mutex<HashMap<T1, T2>>>, k: &T1, value: &T2)
@@ -83,42 +62,26 @@ pub fn add_value<T>(arc: &Arc<Mutex<T>>, value: T)
 where
     T: Clone + std::ops::AddAssign,
 {
-    let mut guard = match arc.lock() {
-        Ok(guard) => guard,
-        Err(_) => {
-            eprintln!("Failed to acquire lock on T");
-            return;
-        }
-    };
-    *guard += value;
+    int::add(arc, value)
 }
 
 pub fn sub_value<T>(arc: &Arc<Mutex<T>>, value: T)
 where
     T: Clone + std::ops::SubAssign,
 {
-    let mut guard = match arc.lock() {
-        Ok(guard) => guard,
-        Err(_) => {
-            eprintln!("Failed to acquire lock on T");
-            return;
-        }
-    };
-    *guard -= value;
+    int::sub(arc, value)
 }
 
 pub fn remove_value<T>(arc: &Arc<Mutex<Vec<T>>>, value: &T)
 where
     T: Eq + PartialEq
 {
-    let mut guard = match arc.lock() {
-        Ok(guard) => guard,
-        Err(_) => {
-            eprintln!("Failed to acquire lock on T");
-            return;
-        }
-    };
-    if let Some(index ) = guard.iter().position(|s| s == value) {
-        guard.remove(index);
-    }
+    vec::remove(arc, value)
+}
+
+pub fn remove_value_hashset<T>(arc: &Arc<Mutex<HashSet<T>>>, value: &T)
+where
+    T: Eq + PartialEq + Hash
+{
+    hashset::remove(arc, value)
 }
