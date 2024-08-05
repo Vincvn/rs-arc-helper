@@ -1,4 +1,5 @@
 use std::sync::{Arc, Mutex};
+use rand::seq::SliceRandom;
 pub fn remove<T>(arc: &Arc<Mutex<Vec<T>>>, value: &T)
 where
     T: Eq + PartialEq
@@ -43,4 +44,17 @@ where
     };
 
     guard.push(value.to_owned());
+}
+
+pub fn random<T>(arc: &Arc<Mutex<Vec<T>>>) -> Option<T> 
+where
+    T: Clone,
+{
+    let mut rng = rand::thread_rng();
+    let vec = crate::get_value(&arc).unwrap_or(Vec::new());
+    let item = vec.choose(&mut rng);
+    match item {
+        Some(item) => Some(item.to_owned()),
+        None => None,
+    }
 }
