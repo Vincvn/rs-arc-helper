@@ -1,7 +1,7 @@
 use std::sync::{Arc, Mutex};
 use rand::seq::SliceRandom;
 
-use crate::get_value;
+use crate::{get_value, set_value};
 pub fn remove<T>(arc: &Arc<Mutex<Vec<T>>>, value: &T)
 where
     T: Eq + PartialEq
@@ -73,4 +73,18 @@ where
     T: Clone,
 {
     get_value(&arc).unwrap_or(Vec::new())
+}
+
+pub fn cut<T>(arc: &Arc<Mutex<Vec<T>>>, size: usize) -> Option<Vec<T>>
+where
+    T: Clone + Copy,
+{
+    match get_value(&arc){
+        Some(mut vec)=>{
+            let taken: Vec<T> = vec.iter().take(size).copied().collect();
+            set_value(arc, vec.split_off(size));
+            return Some(taken)
+        },
+        None=>None,
+    }
 }
