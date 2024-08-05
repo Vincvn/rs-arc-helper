@@ -58,3 +58,10 @@ where
         None => None,
     }
 }
+
+pub fn count<T>(arc: &Arc<Mutex<Vec<T>>>) -> usize 
+where
+    T: Clone,
+{
+    crate::get_value(&arc).unwrap_or(Vec::new()).len()
+}
