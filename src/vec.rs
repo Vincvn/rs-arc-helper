@@ -1,5 +1,7 @@
 use std::sync::{Arc, Mutex};
 use rand::seq::SliceRandom;
+
+use crate::get_value;
 pub fn remove<T>(arc: &Arc<Mutex<Vec<T>>>, value: &T)
 where
     T: Eq + PartialEq
@@ -51,7 +53,7 @@ where
     T: Clone,
 {
     let mut rng = rand::thread_rng();
-    let vec = crate::get_value(&arc).unwrap_or(Vec::new());
+    let vec = get_value(&arc).unwrap_or(Vec::new());
     let item = vec.choose(&mut rng);
     match item {
         Some(item) => Some(item.to_owned()),
@@ -63,5 +65,12 @@ pub fn count<T>(arc: &Arc<Mutex<Vec<T>>>) -> usize
 where
     T: Clone,
 {
-    crate::get_value(&arc).unwrap_or(Vec::new()).len()
+    get_value(&arc).unwrap_or(Vec::new()).len()
+}
+
+pub fn get<T>(arc: &Arc<Mutex<Vec<T>>>) -> Vec<T>
+where 
+    T: Clone,
+{
+    get_value(&arc).unwrap_or(Vec::new())
 }

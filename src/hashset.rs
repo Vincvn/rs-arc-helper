@@ -1,5 +1,7 @@
 use std::{collections:: HashSet, hash::Hash, sync::{Arc, Mutex}};
 use rand::seq::SliceRandom;
+
+use crate::get_value;
 pub fn remove<T>(arc: &Arc<Mutex<HashSet<T>>>, value: &T)
 where
     T: Eq + PartialEq + Hash
@@ -47,4 +49,11 @@ where
     T: Clone,
 {
     crate::get_value(&arc).unwrap_or(HashSet::new()).len()
+}
+
+pub fn get<T>(arc: &Arc<Mutex<HashSet<T>>>) -> HashSet<T>
+where 
+    T: Clone,
+{
+    get_value(&arc).unwrap_or(HashSet::new())
 }
