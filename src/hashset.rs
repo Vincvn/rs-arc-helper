@@ -66,11 +66,11 @@ where
 
 pub fn cut<T>(arc: &Arc<Mutex<HashSet<T>>>, size: usize) -> Option<Vec<T>>
 where
-    T: Clone + Copy + Eq + Hash,
+    T: Clone + Eq + Hash,
 {
     match get_value(&arc){
         Some(mut data)=>{
-            let taken: Vec<T> = data.iter().map(|item|item.to_owned()).collect::<Vec<T>>().iter().take(size).copied().collect();
+            let taken: Vec<T> = data.iter().map(|item|item.to_owned()).collect::<Vec<T>>().iter().take(size).map(|f|f.to_owned()).collect();
             taken.clone().into_iter().for_each(|f|{
                 data.remove(&f);
             });
