@@ -2,6 +2,7 @@ use std::{collections::{HashMap, HashSet}, hash::Hash, sync::{Arc, Mutex}};
 pub mod vec;
 pub mod hashset;
 pub mod int;
+pub mod hashmap;
 pub fn get_arc<T>(data: T) -> Arc<Mutex<T>> {
     Arc::new(Mutex::new(data))
 }
@@ -48,15 +49,7 @@ where
     T1: Clone + Eq + Hash,
     T2: Clone
 {
-    let mut guard = match arc.lock() {
-        Ok(guard) => guard,
-        Err(_) => {
-            eprintln!("Failed to acquire lock on Arc<Mutex<HashMap<T>>>");
-            return;
-        }
-    };
-
-    guard.insert(k.to_owned(), value.to_owned());
+    hashmap::insert(arc, k, value);
 }
 pub fn add_value<T>(arc: &Arc<Mutex<T>>, value: T)
 where

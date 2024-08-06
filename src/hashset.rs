@@ -70,7 +70,7 @@ where
 {
     match get_value(&arc){
         Some(mut data)=>{
-            let taken: Vec<T> = data.iter().map(|item|item.to_owned()).collect::<Vec<T>>().iter().take(size).map(|f|f.to_owned()).collect();
+            let taken: Vec<T> = to_vec(&arc).iter().take(size).map(|f|f.to_owned()).collect();
             taken.clone().into_iter().for_each(|f|{
                 data.remove(&f);
             });
