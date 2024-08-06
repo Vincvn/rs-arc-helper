@@ -88,3 +88,7 @@ where
         None=>None,
     }
 }
+
+pub fn clear<T>(arc: &Arc<Mutex<Vec<T>>>){
+    set_value(&arc, Vec::new())
+}

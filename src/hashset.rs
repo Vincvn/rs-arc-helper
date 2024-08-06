@@ -80,3 +80,7 @@ where
         None=>None,
     }
 }
+
+pub fn clear<T>(arc: &Arc<Mutex<HashSet<T>>>){
+    set_value(&arc, HashSet::new())
+}

@@ -1,6 +1,6 @@
 use std::{collections::HashMap, hash::Hash, sync::{Arc, Mutex}};
 
-use crate::get_value;
+use crate::{get_value, set_value};
 
 pub fn insert<T1, T2>(arc: &Arc<Mutex<HashMap<T1, T2>>>, k: &T1, value: &T2)
 where
@@ -33,4 +33,8 @@ where
     T2: Clone,
 {
     get_value(&arc).unwrap_or(HashMap::new())
+}
+
+pub fn clear<T1, T2>(arc: &Arc<Mutex<HashMap<T1, T2>>>){
+    set_value(&arc, HashMap::new())
 }
