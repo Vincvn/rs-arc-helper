@@ -97,3 +97,10 @@ where
 pub fn clear<T>(arc: &Arc<Mutex<Vec<T>>>){
     set_value(&arc, Vec::new())
 }
+
+pub fn exists<T>(arc: &Arc<Mutex<Vec<T>>>, search: &T) -> bool
+where 
+    T: Clone + PartialEq,
+{
+    get(&arc).contains(search)
+}
