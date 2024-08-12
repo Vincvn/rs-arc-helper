@@ -81,6 +81,11 @@ where
 {
     match get_value(&arc){
         Some(mut vec)=>{
+            let total_size = count(&arc);
+            let mut size = size;
+            if size > total_size {
+                size = total_size
+            }
             let taken: Vec<T> = vec.iter().take(size).map(|d|d.to_owned()).collect();
             set_value(arc, vec.split_off(size));
             return Some(taken)

@@ -27,3 +27,10 @@ where
     };
     *guard -= value;
 }
+
+pub fn get<T>(arc: &Arc<Mutex<T>>, default: T) -> T
+where
+    T: Clone
+{
+    crate::get_value(arc).unwrap_or(default)
+}

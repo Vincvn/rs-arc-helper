@@ -70,6 +70,11 @@ where
 {
     match get_value(&arc){
         Some(mut data)=>{
+            let total_size = count(&arc);
+            let mut size = size;
+            if size > total_size {
+                size = total_size
+            }
             let taken: Vec<T> = to_vec(&arc).iter().take(size).map(|f|f.to_owned()).collect();
             taken.clone().into_iter().for_each(|f|{
                 data.remove(&f);

@@ -3,6 +3,7 @@ pub mod vec;
 pub mod hashset;
 pub mod int;
 pub mod hashmap;
+pub mod string;
 pub fn get_arc<T>(data: T) -> Arc<Mutex<T>> {
     Arc::new(Mutex::new(data))
 }
